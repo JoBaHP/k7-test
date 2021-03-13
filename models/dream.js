@@ -11,8 +11,8 @@ const dreamSchema = new Schema(
       type: String,
       required: true,
     },
-    date: {
-      type: String,
+    crated: {
+      type: Date,
       required: true,
     },
   },
