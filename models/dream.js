@@ -11,6 +11,7 @@ const dreamSchema = new Schema(
       type: String,
       required: true,
     },
+    type: { type: String, enum: [happy, sad, exciting, scary], required: true },
     crated: {
       type: Date,
       required: true,
