@@ -1,58 +1,49 @@
-const Dream = require("../models/dream");
+const express = require("express");
+const router = express.Router();
+const Alien = require("../models/alien");
 
-const dream_index = (req, res) => {
-  Dream.find()
-    .sort({ createdAt: -1 })
-    .then((result) => {
-      res.render("index", { dreams: result, title: "All dreams" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+router.get("/", async (req, res) => {
+  try {
+    const aliens = await Alien.find();
+    res.json(aliens);
+  } catch (err) {
+    res.send("Error " + err);
+  }
+});
 
-const dream_details = (req, res) => {
-  const id = req.params.id;
-  Dream.findById(id)
-    .then((result) => {
-      res.render("details", { dream: result, title: "Dream Details" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+router.get("/:id", async (req, res) => {
+  try {
+    const alien = await Alien.findById(req.params.id);
+    res.json(alien);
+  } catch (err) {
+    res.send("Error " + err);
+  }
+});
 
-const dream_create_get = (req, res) => {
-  res.render("create", { title: "Create a new dream" });
-};
+router.post("/", async (req, res) => {
+  const alien = new Alien({
+    name: req.body.name,
+    tech: req.body.tech,
+    sub: req.body.sub,
+  });
 
-const dream_create_post = (req, res) => {
-  const dream = new Dream(req.body);
-  dream
-    .save()
-    .then((result) => {
-      res.redirect("/dreams");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+  try {
+    const a1 = await alien.save();
+    res.json(a1);
+  } catch (err) {
+    res.send("Error");
+  }
+});
 
-const dream_delete = (req, res) => {
-  const id = req.params.id;
-  Dream.findByIdAndDelete(id)
-    .then((result) => {
-      res.json({ redirect: "/dreams" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+router.patch("/:id", async (req, res) => {
+  try {
+    const alien = await Alien.findById(req.params.id);
+    alien.sub = req.body.sub;
+    const a1 = await alien.save();
+    res.json(a1);
+  } catch (err) {
+    res.send("Error");
+  }
+});
 
-module.exports = {
-  dream_index,
-  dream_details,
-  dream_create_get,
-  dream_create_post,
-  dream_delete,
-};
+module.exports = router;

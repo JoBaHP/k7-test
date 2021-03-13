@@ -11,7 +11,11 @@ const dreamSchema = new Schema(
       type: String,
       required: true,
     },
-    type: { type: String, enum: [happy, sad, exciting, scary], required: true },
+    type: {
+      type: String,
+      enum: ["happy", "sad", "exciting", "scary"],
+      required: true,
+    },
     crated: {
       type: Date,
       required: true,
@@ -20,5 +24,5 @@ const dreamSchema = new Schema(
   { timestamps: true }
 );
 
-const Dream = mongoose.model("Dream", dreamSchema);
+const Dream = mongoose.model("dreams", dreamSchema);
 module.exports = Dream;
