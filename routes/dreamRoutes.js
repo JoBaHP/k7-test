@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Dream = require("../models/dream");
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const dreams = await Dream.find()
@@ -14,6 +14,38 @@ router.get("/", async (req, res) => {
   }
 });
 
+// getDream
+router.get("/", async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const dreams = await Dream.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+    res.json(dreams);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// filter
+router.get("/dreams", async (req, res) => {
+  const match = {};
+
+  if (req.query.title) {
+    match.published = req.query.published === "true";
+  }
+  try {
+    await req.user
+      .populate({
+        path: "dreams",
+        match,
+      })
+      .execPopulate();
+    res.send(req.user.posts);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
 //get 1
 router.get("/:id", async (req, res) => {
   try {
