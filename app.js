@@ -14,8 +14,11 @@ const con = mongoose.connection;
 con.on("open", () => {
   console.log("connected...");
 });
+
+app.use(express.json());
+
 app.use("/dreams", dreamRouter);
 
-app.listen(9000, () => {
+app.listen(3000, () => {
   console.log("Server started");
 });

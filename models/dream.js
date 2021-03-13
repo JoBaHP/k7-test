@@ -19,6 +19,12 @@ const dreamSchema = new Schema(
     crated: {
       type: Date,
       required: true,
+      default: Date.now(),
+    },
+    dreamId: {
+      type: Schema.Types.ObjectId,
+      ref: "Dream",
+      required: true,
     },
   },
   { timestamps: true }

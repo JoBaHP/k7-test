@@ -4,13 +4,17 @@ const Dream = require("../models/dream");
 
 router.get("/", async (req, res) => {
   try {
-    const dreams = await Dream.find();
+    const { page = 1, limit = 10 } = req.query;
+    const dreams = await Dream.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
     res.json(dreams);
   } catch (err) {
-    res.send("Error " + err);
+    res.status(500).json({ message: err.message });
   }
 });
 
+//get 1
 router.get("/:id", async (req, res) => {
   try {
     const dream = await Dream.findById(req.params.id);
@@ -20,6 +24,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// create 1
 router.post("/", async (req, res) => {
   const dream = new Dream({
     title: req.body.title,
@@ -30,21 +35,47 @@ router.post("/", async (req, res) => {
 
   try {
     const a1 = await dream.save();
-    res.json(a1);
+    res.status(201).json(a1);
   } catch (err) {
-    res.send("Error");
+    res.status(400).json({ message: err.message });
   }
 });
 
+// update
 router.patch("/:id", async (req, res) => {
   try {
     const dream = await Dream.findById(req.params.id);
-    dream.type = req.body.type;
+    dream.type = req.body.title;
     const a1 = await dream.save();
     res.json(a1);
   } catch (err) {
     res.send("Error");
   }
 });
+
+//delete
+router.delete("/:id", getDream, async (req, res) => {
+  try {
+    await res.dream.remove();
+    res.json({ message: "Deleted Dream" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+async function getDream(req, res, next) {
+  let dream;
+  try {
+    dream = await Dream.findById(req.params.id);
+    if (dream == null) {
+      return res.status(404).json({ message: "Cannot find dream" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+
+  res.dream = dream;
+  next();
+}
 
 module.exports = router;
