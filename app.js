@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dreamRouter = require("./routes/dreamRoutes");
 
-const mongoDB = "mongodb://127.0.0.1/drams";
+const mongoDB = "mongodb://localhost/dreams";
 
 // express app
 const app = express();
