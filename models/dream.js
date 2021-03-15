@@ -16,15 +16,10 @@ const dreamSchema = new Schema(
       enum: ["happy", "sad", "exciting", "scary"],
       required: true,
     },
-    crated: {
+    created: {
       type: Date,
       required: true,
       default: Date.now(),
-    },
-    dreamId: {
-      type: Schema.Types.ObjectId,
-      ref: "Dream",
-      required: true,
     },
   },
   { timestamps: true }

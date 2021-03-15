@@ -1,18 +1,23 @@
+require("dotenv").config();
+
 const express = require("express");
+const app = express();
+
 const mongoose = require("mongoose");
 const dreamRouter = require("./routes/dreamRoutes");
 
-const mongoDB = "mongodb://localhost/dreams";
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// express app
-const app = express();
+const db = mongoose.connection;
 
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-
-const con = mongoose.connection;
-
-con.on("open", () => {
+db.once("open", () => {
   console.log("connected...");
+});
+db.on("error", (error) => {
+  console.error(error);
 });
 
 app.use(express.json());

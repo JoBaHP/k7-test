@@ -2,20 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Dream = require("../models/dream");
 
-router.get("/", async (req, res, next) => {
-  try {
-    const { page = 1, limit = 10 } = req.query;
-    const dreams = await Dream.find()
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-    res.json(dreams);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// getDream
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const dreams = await Dream.find()
@@ -46,13 +33,14 @@ router.get("/dreams", async (req, res) => {
     res.status(500).send();
   }
 });
+
 //get 1
 router.get("/:id", async (req, res) => {
   try {
     const dream = await Dream.findById(req.params.id);
     res.json(dream);
   } catch (err) {
-    res.send("Error " + err);
+    res.status(500).send();
   }
 });
 
@@ -62,30 +50,37 @@ router.post("/", async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     type: req.body.type,
-    crated: req.body.created,
+    created: req.body.created,
   });
 
   try {
-    const a1 = await dream.save();
-    res.status(201).json(a1);
+    const newDream = await dream.save();
+    res.status(201).json(newDream);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
-// update
-router.patch("/:id", async (req, res) => {
+// Updating One
+router.patch("/:id", getDream, async (req, res) => {
+  if (req.body.title != null) {
+    res.dream.title = req.body.title;
+  }
+  if (req.body.description != null) {
+    res.dream.description = req.body.description;
+  }
+  if (req.body.type != null) {
+    res.dream.type = req.body.type;
+  }
   try {
-    const dream = await Dream.findById(req.params.id);
-    dream.type = req.body.title;
-    const a1 = await dream.save();
-    res.json(a1);
+    const updatedDream = await res.dream.save();
+    res.json(updatedDream);
   } catch (err) {
-    res.send("Error");
+    res.status(400).json({ message: err.message });
   }
 });
 
-//delete
+// delete one
 router.delete("/:id", getDream, async (req, res) => {
   try {
     await res.dream.remove();
@@ -95,6 +90,7 @@ router.delete("/:id", getDream, async (req, res) => {
   }
 });
 
+// helpper middleware find dream
 async function getDream(req, res, next) {
   let dream;
   try {

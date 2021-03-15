@@ -1,0 +1,16 @@
+GET http://localhost:3000/dreams
+
+###############
+
+GET http://localhost:3000/dreams/604f497b68881d2f4400bd67
+
+################
+
+POST http://localhost:3000/dreams
+Content-Type: application/json
+
+{
+    "title": "Welcome to my dream",
+    "description": "I was draming something ",
+    "type": "happy"
+}
