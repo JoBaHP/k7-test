@@ -6,6 +6,8 @@ const app = express();
 const mongoose = require("mongoose");
 const dreamRouter = require("./routes/dreamRoutes");
 
+// in .env DATABASE_URL = mongodb://localhost/dreams
+
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
