@@ -1,6 +1,7 @@
 GET http://localhost:3000/dreams
 
-###############
+
+###########################
 
 GET http://localhost:3000/dreams/604f497b68881d2f4400bd67
 

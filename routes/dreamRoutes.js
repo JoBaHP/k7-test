@@ -4,6 +4,7 @@ const Dream = require("../models/dream");
 
 router.get("/", async (req, res) => {
   try {
+    // paginate
     const { page = 1, limit = 10 } = req.query;
     const dreams = await Dream.find()
       .limit(limit * 1)
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // filter
-router.get("/dreams", async (req, res) => {
+router.get("/", async (req, res) => {
   const match = {};
 
   if (req.query.title) {
