@@ -14,3 +14,16 @@ Content-Type: application/json
     "description": "I was draming something ",
     "type": "happy"
 }
+
+################
+
+DELETE http://localhost:3000/dreams/604f471e19c34a19ac299078
+
+############################
+
+PATCH  http://localhost:3000/dreams/604f4c8268881d2f4400bd69
+Content-Type: application/json
+
+{
+    "title": "New dream"
+}
